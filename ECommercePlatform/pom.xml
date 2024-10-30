@@ -93,6 +93,8 @@
         </dependencies>
     </dependencyManagement>
 
+    <packaging>pom</packaging>
+
     <modules>
         <module>item</module>
         <module>order</module>
