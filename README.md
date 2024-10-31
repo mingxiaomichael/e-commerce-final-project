@@ -23,7 +23,7 @@ Account Service: 127.0.0.1:8083
 
 Item Service (MongoDB): 27017
 
-Order Service (Cassandra): 7000
+Order Service (Cassandra): 9042
 
 Payment Service (MySQL): 3306
 
@@ -31,27 +31,7 @@ Account Service (MySQL): 3307
 
 ## Item Service API Design
 
-Add dependency:
-```
-<dependency>
-    <groupId>org.springframework.data</groupId>
-    <artifactId>spring-data-mongodb</artifactId>
-</dependency>
-```
-
-Config:
-```
-spring.application.name=item
-server.port=8080
-
-spring.data.mongodb.uri=mongodb://root:root@localhost:27017/itemDB
-spring.data.mongodb.port=27017
-spring.data.mongodb.database=itemDB
-spring.data.mongodb.username=root
-spring.data.mongodb.password=root
-```
-
-Create a docker container:
+Docker MongoDB container:
 ```
 docker run --name {name} -e MONGO_INITDB_ROOT_USERNAME={name} -e MONGO_INITDB_ROOT_PASSWORD={password} -p 27017:27017 -d mongo:latest
 ```
@@ -61,13 +41,13 @@ In docker exec:
 mongosh -u {name} -p {password}
 ```
 
-In mongoDB:
+In MongoDB: Create `itemDB` database, and then create `items` collection.
 ```
-use itemDB
-db.createCollection("items")
+use itemDB;
+db.createCollection("items");
 ```
 
-Manually create a instance:
+(Optional) Manually create a instance:
 ```
 db.items.insertOne({
      name: "Sample Item",
@@ -75,13 +55,75 @@ db.items.insertOne({
      unit_price: 19.99,
      quantity: 100,
      createdAt: new Date()
-})
+});
 ```
 
+Add dependency:
+```
+<dependency>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-mongodb</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+In `application.properties` file:
+```
+spring.application.name=item
+server.port=8080
+
+spring.data.mongodb.uri=mongodb://root:root@localhost:27017/itemDB?authSource=admin
+```
+Or
+```
+spring.application.name=item
+server.port=8080
+
+spring.data.mongodb.uri=jdbc:mongodb://localhost:27017/itemDB
+spring.data.mongodb.host=127.0.0.1
+spring.data.mongodb.port=27017
+spring.data.mongodb.username=root
+spring.data.mongodb.password=root
+spring.data.mongodb.database=itemDB
+spring.data.mongodb.authentication-database = admin
+```
 
 ## Order Service API Design
 
+Docker Cassandra container:
+```
+docker run --name order -e CASSANDRA_USER={username} -e CASSANDRA_PASSWORD={password} -p 9042:9042 -d cassandra
+```
+In docker exec:
+```
+cqlsh -u {username} -p {password}
+```
+Create a keyspace (database):
+```
+CREATE KEYSPACE orderDB WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+```
+Create a table:
+```
+use orderDB;
+CREATE TABLE orders(id int PRIMARY KEY, name text);
+```
 
+In `application.properties` file:
+```
+spring.application.name=order
+server.port=8081
+
+spring.cassandra.contact-points=127.0.0.1
+spring.cassandra.port=9042
+spring.cassandra.keyspace-name=orderdb
+spring.cassandra.username=root
+spring.cassandra.password=root
+spring.cassandra.local-datacenter=datacenter1
+spring.cassandra.authenticator=PasswordAuthenticator
+```
 
 
 ## Payment Service API Design
