@@ -64,6 +64,7 @@ mongosh -u {name} -p {password}
 In mongoDB:
 ```
 use itemDB
+db.createCollection("items")
 ```
 
 Manually create a instance:

@@ -11,6 +11,7 @@
     <groupId>com.ecommerce</groupId>
     <artifactId>ECommercePlatform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>ECommercePlatform</name>
     <description>ECommercePlatform</description>
     <url/>
@@ -92,8 +93,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <packaging>pom</packaging>
 
     <modules>
         <module>item</module>

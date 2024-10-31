@@ -1,81 +1,58 @@
 package com.ecommerce.item.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-@Document(collection = "items") // Specifies the collection name in MongoDB
+@Document(collection = "items")
 public class Item {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String itemName;
-    private int purchaseLimit;
-    private String category;
-    private int inventory;
+    private ObjectId id;
+    @Field
+    private String name;
+    @Field
+    private double price;
 
-    public Item(Long id, String itemName, int purchaseLimit, String category, int inventory) {
-        this.id = id;
-        this.itemName = itemName;
-        this.purchaseLimit = purchaseLimit;
-        this.category = category;
-        this.inventory = inventory;
+    public Item() {
     }
 
-    public Long getId() {
+    public Item(ObjectId id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
-    public String getItemName() {
-        return itemName;
+    public String getName() {
+        return name;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getPurchaseLimit() {
-        return purchaseLimit;
+    public double getPrice() {
+        return price;
     }
 
-    public void setPurchaseLimit(int purchaseLimit) {
-        this.purchaseLimit = purchaseLimit;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public int getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(int inventory) {
-        this.inventory = inventory;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @Override
     public String toString() {
         return "Item{" +
                 "id=" + id +
-                ", itemName='" + itemName + '\'' +
-                ", purchaseLimit=" + purchaseLimit +
-                ", category='" + category + '\'' +
-                ", inventory=" + inventory +
+                ", name='" + name + '\'' +
+                ", price=" + price +
                 '}';
     }
 }
