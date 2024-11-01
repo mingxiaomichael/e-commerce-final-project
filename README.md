@@ -29,7 +29,9 @@ Payment Service (MySQL): 3306
 
 Account Service (MySQL): 3307
 
-## Item Service API Design
+## Item Service
+
+### MongoDB connection
 
 Docker MongoDB container:
 ```
@@ -91,7 +93,30 @@ spring.data.mongodb.database=itemDB
 spring.data.mongodb.authentication-database = admin
 ```
 
-## Order Service API Design
+### Item Service API Design
+
+Create item: 
+
+POST: `http://localhost:8080/items`
+
+Request body:
+```
+{
+    "itemName": "iPhone",
+    "price": 999.99,
+    "category": "electronics",
+    "purchaseLimit": 10,
+    "inventory": 1000
+}
+```
+
+Find item by name:
+
+GET: `http://localhost:8080/items/name/iPhone`
+
+## Order Service
+
+### Cassandra connection
 
 Docker Cassandra container:
 ```
