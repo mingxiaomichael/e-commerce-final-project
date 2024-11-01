@@ -6,6 +6,7 @@ import com.ecommerce.item.entity.Item;
 import com.ecommerce.item.payload.ItemDto;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,17 +17,22 @@ public interface ItemService {
 
     ItemDto createItem(ItemDto itemDto);
 
+    ItemDto updateItem(String itemName,ItemDto itemDto);
+
+    void deleteItemByItemName(String itemName);
+
 //    void deleteItemById(ObjectId id);
 
     List<ItemDto> findItemByItemName(String itemName);
 
     List<ItemDto> findItemByInventory();
 
-    List<ItemDto> findByItemNameAndInventory(String itemName, String inventory);
+    List<ItemDto> findByItemNameAndInventory(String itemName);
 
     // Find items with purchase limit below a certain number
     List<ItemDto> findByPurchaseLimitLessThan(int limit);
 
-    List<ItemDto> findByInventoryMoreThanPurchaseLimit();
+
+    List<ItemDto> findItemsWithInventoryGreaterThanOrEqualToPurchaseLimit();
 
 }

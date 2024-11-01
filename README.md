@@ -101,6 +101,7 @@ POST: `http://localhost:8080/items`
 
 Request body:
 ```
+
 {
     "itemName": "iPhone",
     "price": 999.99,
@@ -108,11 +109,56 @@ Request body:
     "purchaseLimit": 10,
     "inventory": 1000
 }
+
+{
+    "itemName": "iPad",
+    "price": 888.88,
+    "category": "electronics",
+    "purchaseLimit": 10,
+    "inventory": 0
+}
 ```
 
-Find item by name:
+Find item by inventory:
 
-GET: `http://localhost:8080/items/name/iPhone`
+GET: `http://localhost:8080/items`
+
+
+Find item by name with inventory:
+
+GET: `http://localhost:8080/items/name/inventory/iPhone`
+
+Find item by purchase limit 
+
+
+GET `http://localhost:8080/items/purchaseLimit/5`
+GET `http://localhost:8080/items/purchaseLimit/20`
+
+Find item by inventory more than purchase limit
+
+GET `inventory`
+
+Update item: 
+
+PUT: `http://localhost:8080/items/iPhone`
+
+Request body:
+```
+{
+    "itemName": "iPhone",
+    "price": 100,
+    "category": "electronics",
+    "purchaseLimit": 10,
+    "inventory": 1000
+}
+```
+
+Delete item: 
+
+DELETE: `http://localhost:8080/items/iPhone`
+
+
+
 
 ## Order Service
 

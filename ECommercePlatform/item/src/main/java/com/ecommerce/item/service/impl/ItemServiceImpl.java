@@ -33,6 +33,24 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public ItemDto updateItem(String itemName,ItemDto itemDtoRequest){
+        Item item = itemDao.findByItemName(itemName).get(0);
+        item.setPrice(itemDtoRequest.getPrice());
+        item.setCategory(itemDtoRequest.getCategory());
+        item.setPurchaseLimit(itemDtoRequest.getPurchaseLimit());
+        item.setInventory(itemDtoRequest.getInventory());
+        Item updateItem = itemDao.save(item);
+
+        return mapToDto(updateItem);
+    }
+
+    @Override
+    public void deleteItemByItemName(String itemName){
+        Item item = itemDao.findByItemName(itemName).get(0);
+        itemDao.delete(item);
+    }
+
+    @Override
     public List<ItemDto> findItemByItemName(String itemName) {
         List<Item> items = itemDao.findByItemName(itemName);
         return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
@@ -48,7 +66,7 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    public List<ItemDto> findByItemNameAndInventory(String itemName, String inventory) {
+    public List<ItemDto> findByItemNameAndInventory(String itemName) {
         Query query = new Query();
         query.addCriteria(Criteria.where("itemName").is(itemName).and("inventory").gt(0));
         List<Item> items = mongoTemplate.find(query, Item.class);
@@ -65,11 +83,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> findByInventoryMoreThanPurchaseLimit(){
-        Query query = new Query();
-        query.addCriteria(Criteria.where("inventory").gte("purchaseLimit"));
-        List<Item> items = mongoTemplate.find(query, Item.class);
+    public List<ItemDto> findItemsWithInventoryGreaterThanOrEqualToPurchaseLimit(){
+        List<Item> items = itemDao.findItemsWithInventoryGreaterThanOrEqualToPurchaseLimit();
         return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+
     }
 
     private ItemDto mapToDto(Item item) {

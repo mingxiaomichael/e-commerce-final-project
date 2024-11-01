@@ -13,12 +13,12 @@ public class ItemDto {
 
     private int purchaseLimit;
 
-    private String inventory;
+    private int inventory;
 
     public ItemDto() {
     }
 
-    public ItemDto(String itemName, double price, String category, int purchaseLimit, String inventory) {
+    public ItemDto(String itemName, double price, String category, int purchaseLimit, int inventory) {
         this.itemName = itemName;
         this.price = price;
         this.category = category;
@@ -58,11 +58,11 @@ public class ItemDto {
         this.purchaseLimit = purchaseLimit;
     }
 
-    public String getInventory() {
+    public int getInventory() {
         return inventory;
     }
 
-    public void setInventory(String inventory) {
+    public void setInventory(int inventory) {
         this.inventory = inventory;
     }
 

@@ -23,12 +23,12 @@ public class Item {
     private int purchaseLimit;
 
     @Field
-    private String inventory;
+    private int inventory;
 
     public Item(){
     }
 
-    public Item(ObjectId id, String itemName, double price, String category, int purchaseLimit, String inventory) {
+    public Item(ObjectId id, String itemName, double price, String category, int purchaseLimit, int inventory) {
         this.id = id;
         this.itemName = itemName;
         this.price = price;
@@ -77,11 +77,11 @@ public class Item {
         this.purchaseLimit = purchaseLimit;
     }
 
-    public String getInventory() {
+    public int getInventory() {
         return inventory;
     }
 
-    public void setInventory(String inventory) {
+    public void setInventory(int inventory) {
         this.inventory = inventory;
     }
 
