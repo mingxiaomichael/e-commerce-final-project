@@ -5,7 +5,12 @@ import com.ecommerce.item.entity.Item;
 import com.ecommerce.item.payload.ItemDto;
 import com.ecommerce.item.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.MongoExpression;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -84,9 +89,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> findItemsWithInventoryGreaterThanOrEqualToPurchaseLimit(){
-        List<Item> items = itemDao.findItemsWithInventoryGreaterThanOrEqualToPurchaseLimit();
-        return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+        MatchOperation matchOperation = Aggregation.match(Criteria
+                .where("$expr")
+                .gte(List.of("$inventory", "$purchaseLimit"))); // Comparing 'inventory' to 'purchaseLimit'
 
+        Aggregation aggregation = Aggregation.newAggregation(matchOperation);
+        List<Item> items = mongoTemplate.aggregate(aggregation, "items", Item.class).getMappedResults();
+        return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
     }
 
     private ItemDto mapToDto(Item item) {

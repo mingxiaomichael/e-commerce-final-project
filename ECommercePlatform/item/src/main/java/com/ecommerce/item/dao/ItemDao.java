@@ -17,9 +17,4 @@ public interface ItemDao extends MongoRepository<Item, ObjectId> {
     List<Item> findByCategory(String category);
     List<Item> findByItemNameAndCategory(String itemName, String category);
 
-    @Query("{ 'inventory' : { $gte : '$purchaseLimit' } }")
-    List<Item> findItemsWithInventoryGreaterThanOrEqualToPurchaseLimit();
-
-
-
 }
