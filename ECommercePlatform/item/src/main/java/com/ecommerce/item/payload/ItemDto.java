@@ -1,48 +1,29 @@
-package com.ecommerce.item.entity;
+package com.ecommerce.item.payload;
 
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "items")
-public class Item {
-    @Id
-    private ObjectId id;
+public class ItemDto {
+    //private ObjectId id;
 
-    @Field
     private String itemName;
 
-    @Field
     private double price;
 
-    @Field
     private String category;
 
-    @Field
     private int purchaseLimit;
 
-    @Field
     private String inventory;
 
-    public Item(){
+    public ItemDto() {
     }
 
-    public Item(ObjectId id, String itemName, double price, String category, int purchaseLimit, String inventory) {
-        this.id = id;
+    public ItemDto(String itemName, double price, String category, int purchaseLimit, String inventory) {
         this.itemName = itemName;
         this.price = price;
         this.category = category;
         this.purchaseLimit = purchaseLimit;
         this.inventory = inventory;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     public String getItemName() {
@@ -87,9 +68,8 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", itemName='" + itemName + '\'' +
+        return "ItemDto{" +
+                "itemName='" + itemName + '\'' +
                 ", price=" + price +
                 ", category='" + category + '\'' +
                 ", purchaseLimit=" + purchaseLimit +
