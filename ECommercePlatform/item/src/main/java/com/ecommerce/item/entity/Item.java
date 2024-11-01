@@ -10,17 +10,22 @@ public class Item {
     @Id
     private ObjectId id;
     @Field
-    private String name;
+    private String itemName;
     @Field
     private double price;
 
-    public Item() {
-    }
+    @Field
+    private String category;
 
-    public Item(ObjectId id, String name, double price) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
+    @Field
+    private int purchaseLimit;
+
+    @Field
+    private String inventory;
+
+
+    public Item(){
+
     }
 
     public ObjectId getId() {
@@ -31,12 +36,12 @@ public class Item {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getItemName() {
+        return itemName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     public double getPrice() {
@@ -47,12 +52,49 @@ public class Item {
         this.price = price;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getPurchaseLimit() {
+        return purchaseLimit;
+    }
+
+    public void setPurchaseLimit(int purchaseLimit) {
+        this.purchaseLimit = purchaseLimit;
+    }
+
+    public String getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(String inventory) {
+        this.inventory = inventory;
+    }
+
     @Override
     public String toString() {
         return "Item{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", itemName='" + itemName + '\'' +
                 ", price=" + price +
+                ", category='" + category + '\'' +
+                ", purchaseLimit=" + purchaseLimit +
+                ", inventory='" + inventory + '\'' +
                 '}';
+    }
+
+
+    public Item(ObjectId id, String itemName, double price, String category, int purchaseLimit, String inventory) {
+        this.id = id;
+        this.itemName = itemName;
+        this.price = price;
+        this.category = category;
+        this.purchaseLimit = purchaseLimit;
+        this.inventory = inventory;
     }
 }

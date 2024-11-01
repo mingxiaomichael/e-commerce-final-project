@@ -1,5 +1,6 @@
 package com.ecommerce.item.service;
 
+import com.ecommerce.item.dao.CustomizedItemDao;
 import com.ecommerce.item.dao.ItemDao;
 import com.ecommerce.item.entity.Item;
 import org.bson.types.ObjectId;
@@ -10,15 +11,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ItemService {
-    @Autowired
-    private ItemDao itemDao;
+public interface ItemService {
 
-    public Item saveItem(Item item) {
-        return itemDao.save(item);
-    }
+    List<Item> findItemByInventory();
 
-    public List<Item> findItemsByName(String name) {
-        return itemDao.findByName(name);
-    }
+    List<Item> findByItemNameAndInventory(String itemName, String inventory);
+
+    // Find items with purchase limit below a certain number
+    List<Item> findByPurchaseLimitLessThan(int limit);
+
+    List<Item> findByInventoryMoreThanPurchaseLimit();
+
 }
