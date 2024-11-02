@@ -1,25 +1,18 @@
-package com.ecommerce.order.entity;
+package com.ecommerce.order.payload;
 
-import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
-import org.springframework.data.cassandra.core.mapping.Column;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
-import org.springframework.data.cassandra.core.mapping.Table;
+import com.ecommerce.item.entity.Item;
+import com.ecommerce.item.payload.ItemDto;
 
-
-@Table(value = "orders")
-public class Order {
-    @PrimaryKeyColumn(name = "id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+public class OrderDto {
     private int id;
-    @PrimaryKeyColumn(name = "name", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
     private String name;
-    @Column("itemname")
     private String itemName;
+    private ItemDto item;
 
-    public Order() {
+    public OrderDto() {
     }
 
-    public Order(int id, String name, String itemName) {
+    public OrderDto(int id, String name, String itemName) {
         this.id = id;
         this.name = name;
         this.itemName = itemName;
@@ -49,12 +42,21 @@ public class Order {
         this.itemName = itemName;
     }
 
+    public ItemDto getItem() {
+        return item;
+    }
+
+    public void setItem(ItemDto item) {
+        this.item = item;
+    }
+
     @Override
     public String toString() {
-        return "Order{" +
+        return "OrderDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", itemName='" + itemName + '\'' +
+                ", item=" + item +
                 '}';
     }
 }

@@ -8,6 +8,6 @@ import org.springframework.data.cassandra.repository.Query;
 import java.util.List;
 
 public interface OrderDao extends CassandraRepository<Order, OrderEntityCompositeKey> {
-    @Query("SELECT * FROM orders WHERE name = :#{#name}")
-    List<Order> findByName(String name);
+    List<Order> findById(int id);
+    List<Order> findByIdAndName(int id, String name);
 }
