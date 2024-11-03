@@ -3,13 +3,14 @@ package com.ecommerce.item.service.impl;
 import com.ecommerce.item.dao.ItemDao;
 import com.ecommerce.item.entity.Item;
 import com.ecommerce.item.payload.ItemDto;
+import com.ecommerce.item.payload.ItemResponse;
 import com.ecommerce.item.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.MongoExpression;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -38,6 +39,35 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public ItemResponse findAllItems(int pageNo, int pageSize, String sortBy, String sortDir){
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        // create pageable instance
+        PageRequest pageRequest = PageRequest.of(pageNo, pageSize, sort);
+        Page<Item> pageItems = itemDao.findAll(pageRequest);
+
+        // get content for page abject
+        List<Item> items = pageItems.getContent();
+        List<ItemDto> itemDtos = items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+
+        ItemResponse itemResponse = new ItemResponse();
+        itemResponse.setContent(itemDtos);
+        itemResponse.setPageNo(pageItems.getNumber());
+        itemResponse.setPageSize(pageItems.getSize());
+        itemResponse.setTotalElements(pageItems.getTotalElements());
+        itemResponse.setTotalPages(pageItems.getTotalPages());
+        itemResponse.setLast(pageItems.isLast());
+        return itemResponse;
+    }
+
+    @Override
+    public  List<ItemDto> findByItemID(int itemID){
+        List<Item> items = itemDao.findByItemID(itemID);
+        return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+    }
+
+    @Override
     public ItemDto updateItem(String itemName,ItemDto itemDtoRequest){
         Item item = itemDao.findByItemName(itemName).get(0);
         item.setPrice(itemDtoRequest.getPrice());
@@ -45,7 +75,6 @@ public class ItemServiceImpl implements ItemService {
         item.setPurchaseLimit(itemDtoRequest.getPurchaseLimit());
         item.setInventory(itemDtoRequest.getInventory());
         Item updateItem = itemDao.save(item);
-
         return mapToDto(updateItem);
     }
 
@@ -69,7 +98,6 @@ public class ItemServiceImpl implements ItemService {
         return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
     }
 
-
     @Override
     public List<ItemDto> findByItemNameAndInventory(String itemName) {
         Query query = new Query();
@@ -78,7 +106,6 @@ public class ItemServiceImpl implements ItemService {
         return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
     }
 
-    //add dto
     @Override
     public List<ItemDto> findByPurchaseLimitLessThan(int limit) {
         Query query = new Query();
@@ -101,6 +128,7 @@ public class ItemServiceImpl implements ItemService {
     private ItemDto mapToDto(Item item) {
         ItemDto itemDto = new ItemDto();
         //itemDto.setId(item.getId());
+        itemDto.setItemID(item.getItemID());
         itemDto.setItemName(item.getItemName());
         itemDto.setPrice(item.getPrice());
         itemDto.setCategory(item.getCategory());
@@ -112,6 +140,7 @@ public class ItemServiceImpl implements ItemService {
     private Item mapToEntity(ItemDto itemDto){
         Item item = new Item();
         //item.setId(itemDto.getId());
+        item.setItemID(itemDto.getItemID());
         item.setItemName(itemDto.getItemName());
         item.setPrice(itemDto.getPrice());
         item.setCategory(itemDto.getCategory());

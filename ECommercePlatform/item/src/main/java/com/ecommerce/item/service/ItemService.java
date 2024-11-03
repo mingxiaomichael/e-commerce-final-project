@@ -1,21 +1,19 @@
 package com.ecommerce.item.service;
 
-import com.ecommerce.item.dao.CustomizedItemDao;
-import com.ecommerce.item.dao.ItemDao;
-import com.ecommerce.item.entity.Item;
 import com.ecommerce.item.payload.ItemDto;
-import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.Query;
+import com.ecommerce.item.payload.ItemResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface ItemService {
 
     ItemDto createItem(ItemDto itemDto);
+
+    ItemResponse findAllItems(int pageNo, int pageSize, String sortBy, String sortDir);
+
+    List<ItemDto> findByItemID(int itemID);
 
     ItemDto updateItem(String itemName,ItemDto itemDto);
 

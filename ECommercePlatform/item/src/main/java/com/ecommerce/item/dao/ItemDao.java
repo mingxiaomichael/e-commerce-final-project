@@ -11,10 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ItemDao extends MongoRepository<Item, ObjectId> {
-    /*findAll()*/
-
     List<Item> findByItemName(String itemName);
+    List<Item> findByItemID(int itemID);
     List<Item> findByCategory(String category);
     List<Item> findByItemNameAndCategory(String itemName, String category);
-
 }

@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 public class ItemDto {
     //private ObjectId id;
 
+    private int itemID;
     private String itemName;
 
     private double price;
@@ -18,12 +19,21 @@ public class ItemDto {
     public ItemDto() {
     }
 
-    public ItemDto(String itemName, double price, String category, int purchaseLimit, int inventory) {
+    public ItemDto(int itemID, String itemName, double price, String category, int purchaseLimit, int inventory) {
+        this.itemID = itemID;
         this.itemName = itemName;
         this.price = price;
         this.category = category;
         this.purchaseLimit = purchaseLimit;
         this.inventory = inventory;
+    }
+
+    public int getItemID() {
+        return itemID;
+    }
+
+    public void setItemID(int itemID) {
+        this.itemID = itemID;
     }
 
     public String getItemName() {
@@ -69,11 +79,12 @@ public class ItemDto {
     @Override
     public String toString() {
         return "ItemDto{" +
-                "itemName='" + itemName + '\'' +
+                "itemID=" + itemID +
+                ", itemName='" + itemName + '\'' +
                 ", price=" + price +
                 ", category='" + category + '\'' +
                 ", purchaseLimit=" + purchaseLimit +
-                ", inventory='" + inventory + '\'' +
+                ", inventory=" + inventory +
                 '}';
     }
 }

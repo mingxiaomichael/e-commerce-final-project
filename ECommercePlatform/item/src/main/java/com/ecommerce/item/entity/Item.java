@@ -11,6 +11,9 @@ public class Item {
     private ObjectId id;
 
     @Field
+    private  int itemID;
+
+    @Field
     private String itemName;
 
     @Field
@@ -28,13 +31,22 @@ public class Item {
     public Item(){
     }
 
-    public Item(ObjectId id, String itemName, double price, String category, int purchaseLimit, int inventory) {
+    public Item(ObjectId id, int itemID,String itemName, double price, String category, int purchaseLimit, int inventory) {
         this.id = id;
+        this.itemID = itemID;
         this.itemName = itemName;
         this.price = price;
         this.category = category;
         this.purchaseLimit = purchaseLimit;
         this.inventory = inventory;
+    }
+
+    public int getItemID() {
+        return itemID;
+    }
+
+    public void setItemID(int itemID) {
+        this.itemID = itemID;
     }
 
     public ObjectId getId() {
@@ -89,11 +101,12 @@ public class Item {
     public String toString() {
         return "Item{" +
                 "id=" + id +
+                ", itemID=" + itemID +
                 ", itemName='" + itemName + '\'' +
                 ", price=" + price +
                 ", category='" + category + '\'' +
                 ", purchaseLimit=" + purchaseLimit +
-                ", inventory='" + inventory + '\'' +
+                ", inventory=" + inventory +
                 '}';
     }
 }
