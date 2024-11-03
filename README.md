@@ -103,6 +103,7 @@ Request body:
 ```
 
 {
+    
     "itemName": "iPhone",
     "price": 999.99,
     "category": "electronics",
@@ -117,7 +118,20 @@ Request body:
     "purchaseLimit": 10,
     "inventory": 0
 }
+
+{
+    "itemID": 1,
+    "itemName": "Airpod",
+    "price": 888.88,
+    "category": "electronics",
+    "purchaseLimit": 10,
+    "inventory": 1000
+}
 ```
+
+Find item by itemID
+GET `http://localhost:8080/items/itemID/1`
+
 
 Find item by inventory:
 
