@@ -216,4 +216,98 @@ spring.cassandra.authenticator=PasswordAuthenticator
 
 
 
-## Account Service API Design
+## Account Service
+
+### MySQL connection
+
+Docker MySQL container:
+```
+docker run --name {name} -e MYSQL_ROOT_PASSWORD={password} -p 3307:3306 -d mysql
+```
+
+In docker exec:
+```
+mysql -u {name} -p {password}
+```
+
+In MySQL: Create `accountDB` database.
+```
+CREATE DATABASE accountDB;
+```
+
+Add dependency:
+```
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+<!-- MySQL Connector -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.32</version> <!-- Make sure to use the latest version -->
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.11.2</version>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.11.2</version>
+    <scope>runtime</scope>
+</dependency>
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.11.2</version>
+    <scope>runtime</scope>
+</dependency>
+```
+
+In `application.properties` file:
+```
+spring.application.name=account
+
+server.port=8083
+
+#spring.datasource.url=jdbc:mysql://localhost:3307/accountDB?allowPublicKeyRetrieval=true&useSSL=false
+spring.datasource.url=jdbc:mysql://localhost:3307/accountDB
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+```
+
+How to setup JWT in Spring Boot:
+
+1. JwtUtil (Utility Class)
+Purpose: Manages token creation, validation, and extraction.
+Key Methods.
+2. JwtFilter (Custom Filter)
+Purpose: Intercepts incoming requests to check for a valid JWT token in the Authorization header, verifies it, and sets authentication information in the security context.
+3. WebSecurityConfig (Configuration Class)
+Purpose: Configures Spring Security to use JWT-based authentication and applies security settings across endpoints.
+
+### Account Service API Design
+
+
+
+
+
