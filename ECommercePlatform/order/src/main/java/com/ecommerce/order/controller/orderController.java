@@ -39,4 +39,9 @@ public class orderController {
         List<OrderDto> response = orderService.findOrderByIdAndName(id, name);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("xxxxxxx");
+    }
 }

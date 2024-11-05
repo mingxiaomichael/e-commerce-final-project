@@ -13,3 +13,4 @@ public interface ItemClient {
     @RequestMapping("/name/{itemName}")
     ResponseEntity<List<ItemDto>> findItemsByItemName(@PathVariable String itemName);
 }
+

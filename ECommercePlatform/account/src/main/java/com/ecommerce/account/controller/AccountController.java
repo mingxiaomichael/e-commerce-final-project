@@ -22,8 +22,11 @@ public class AccountController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody AccountDto accountDto) {
-        String token = jwtUtil.generateToken(accountDto.getUserEmail());
-        return ResponseEntity.ok(token);
+        String token = accountService.login(accountDto);
+        Long userId = jwtUtil.extractUserId(token);
+        String userEmail = jwtUtil.extractUserEmail(token);
+        String response = token + "\n" + userId.toString() + "\n" + userEmail;
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")

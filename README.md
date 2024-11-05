@@ -101,7 +101,6 @@ POST: `http://localhost:8080/items`
 
 Request body:
 ```
-
 {
     
     "itemName": "iPhone",
@@ -213,7 +212,22 @@ spring.cassandra.authenticator=PasswordAuthenticator
 
 ## Payment Service API Design
 
+### MySQL connection
 
+Docker MySQL container:
+```
+docker run --name {name} -e MYSQL_ROOT_PASSWORD={password} -p 3306:3306 -d mysql
+```
+
+In docker exec:
+```
+mysql -u {name} -p {password}
+```
+
+In MySQL: Create `paymentDB` database.
+```
+CREATE DATABASE paymentDB;
+```
 
 
 ## Account Service

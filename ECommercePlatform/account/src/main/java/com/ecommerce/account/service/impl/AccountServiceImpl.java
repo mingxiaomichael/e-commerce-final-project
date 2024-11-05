@@ -34,8 +34,9 @@ public class AccountServiceImpl implements AccountService {
         String userEmail = accountDto.getUserEmail();
         String password = accountDto.getPassword();
         AccountDto account = findByUserEmail(userEmail);
+        Long userId = account.getUserId();
         if (verifyPassword(password, account.getPassword())) {
-            return jwtUtil.generateToken(userEmail);
+            return jwtUtil.generateToken(userEmail, userId);
         }
         throw new RuntimeException("Wrong userEmail or password");
     }
