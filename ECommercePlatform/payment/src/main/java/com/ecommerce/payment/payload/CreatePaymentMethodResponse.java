@@ -2,7 +2,7 @@ package com.ecommerce.payment.payload;
 
 import java.time.LocalDateTime;
 
-public class PaymentResponse {
+public class CreatePaymentMethodResponse {
     private long orderId;
 
     private String paymentStatus;
@@ -11,17 +11,17 @@ public class PaymentResponse {
 
     private String billingAddress;
 
-    private int ZIP;
+    private int zip;
 
-    private LocalDateTime createDateTime;
+    public CreatePaymentMethodResponse() {
+    }
 
-    public PaymentResponse(long orderId, String paymentStatus, String paymentCard, String billingAddress, int ZIP, LocalDateTime createDateTime) {
+    public CreatePaymentMethodResponse(long orderId, String paymentStatus, String paymentCard, String billingAddress, int zip) {
         this.orderId = orderId;
         this.paymentStatus = paymentStatus;
         this.paymentCard = paymentCard;
         this.billingAddress = billingAddress;
-        this.ZIP = ZIP;
-        this.createDateTime = createDateTime;
+        this.zip = zip;
     }
 
     public long getOrderId() {
@@ -57,21 +57,11 @@ public class PaymentResponse {
     }
 
     public int getZIP() {
-        return ZIP;
+        return zip;
     }
 
     public void setZIP(int ZIP) {
-        this.ZIP = ZIP;
+        this.zip = ZIP;
     }
-
-    public LocalDateTime getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
-
 
 }

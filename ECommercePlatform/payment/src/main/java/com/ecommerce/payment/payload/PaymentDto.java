@@ -11,7 +11,6 @@ public class PaymentDto {
 
     private long orderId;
 
-
     private String paymentCard;
 
     private String cardExpiration;
@@ -20,20 +19,18 @@ public class PaymentDto {
 
     private String billingAddress;
 
-    private int ZIP;
-
+    private int zip;
 
 
     public PaymentDto(){}
 
-    public PaymentDto(long orderId, String paymentCard, String cardExpiration, int cvv, String billingAddress, int ZIP) {
+    public PaymentDto(long orderId, String paymentCard, String cardExpiration, int cvv, String billingAddress, int zip) {
         this.orderId = orderId;
         this.paymentCard = paymentCard;
         this.cardExpiration = cardExpiration;
         this.cvv = cvv;
         this.billingAddress = billingAddress;
-        this.ZIP = ZIP;
-
+        this.zip = zip;
     }
 
     public long getOrderId() {
@@ -43,7 +40,6 @@ public class PaymentDto {
     public void setOrderId(long orderId) {
         this.orderId = orderId;
     }
-
 
     public String getPaymentCard() {
         return paymentCard;
@@ -78,11 +74,11 @@ public class PaymentDto {
     }
 
     public int getZIP() {
-        return ZIP;
+        return zip;
     }
 
-    public void setZIP(int ZIP) {
-        this.ZIP = ZIP;
+    public void setZIP(int zip) {
+        this.zip = zip;
     }
 
 
@@ -95,7 +91,7 @@ public class PaymentDto {
                 ", cardExpiration='" + cardExpiration + '\'' +
                 ", cvv=" + cvv +
                 ", billingAddress='" + billingAddress + '\'' +
-                ", ZIP=" + ZIP +
+                ", zip=" + zip +
                 '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.ecommerce.payment.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -16,11 +17,6 @@ public class Payment {
     @Column(nullable = false)
     private Long userId;
 
-
-
-    @Column(nullable = false)
-    private String paymentStatus;
-
     @Column(length = 16,nullable = false)
     private String paymentCard;
 
@@ -34,24 +30,21 @@ public class Payment {
     private String billingAddress;
 
     @Column(nullable = false)
-    private int ZIP;
+    private int zip;
 
     @CreationTimestamp
     private LocalDateTime createDateTime;
 
-
-
     public Payment(){
     }
 
-    public Payment(Long userId,  String paymentStatus, String paymentCard, String cardExpiration, int cvv, String billingAddress, int ZIP) {
+    public Payment(Long userId, String paymentCard, String cardExpiration, int cvv, String billingAddress, int zip) {
         this.userId = userId;
-        this.paymentStatus = paymentStatus;
         this.paymentCard = paymentCard;
         this.cardExpiration = cardExpiration;
         this.cvv = cvv;
         this.billingAddress = billingAddress;
-        this.ZIP = ZIP;
+        this.zip = zip;
         this.createDateTime = LocalDateTime.now();
     }
 
@@ -62,15 +55,6 @@ public class Payment {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-
-    public String getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
     }
 
     public String getPaymentCard() {
@@ -106,31 +90,30 @@ public class Payment {
     }
 
     public int getZIP() {
-        return ZIP;
+        return zip;
     }
 
-    public void setZIP(int ZIP) {
-        this.ZIP = ZIP;
+    public void setZIP(int zip) {
+        this.zip = zip;
     }
 
     public LocalDateTime getCreateDateTime() {
         return createDateTime;
     }
 
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
+    public void setCreateDateTime() {
+        this.createDateTime = LocalDateTime.now();
     }
 
     @Override
     public String toString() {
         return "Payment{" +
                 "userId=" + userId +
-                ", paymentStatus='" + paymentStatus + '\'' +
                 ", paymentCard='" + paymentCard + '\'' +
                 ", cardExpiration='" + cardExpiration + '\'' +
                 ", cvv=" + cvv +
                 ", billingAddress='" + billingAddress + '\'' +
-                ", ZIP=" + ZIP +
+                ", zip=" + zip +
                 ", createDateTime=" + createDateTime +
                 '}';
     }

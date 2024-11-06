@@ -15,7 +15,7 @@ Account Service: 127.0.0.1:8083
 | **Service** | **Database** | **Reason** |
 |-------------|--------------|------------|
 | Item Service | MongoDB | High Read Performance, flexible schema |
-| Order Service | Cassandra | High write throughput, high availability |
+| Order Service | Cassandra | High write throughput, high scalability |
 | Payment Service | MySQL | Transactional |
 | Account Service | MySQL | Fixed data model |
 
@@ -210,7 +210,7 @@ spring.cassandra.authenticator=PasswordAuthenticator
 ```
 
 
-## Payment Service API Design
+## Payment Service
 
 ### MySQL connection
 
@@ -228,6 +228,68 @@ In MySQL: Create `paymentDB` database.
 ```
 CREATE DATABASE paymentDB;
 ```
+
+### Payment Service API Design
+
+
+Create payment method:
+
+POST: `http://localhost:8082/payment/createPaymentMethod`
+
+
+Request body:
+```
+{
+    "orderId": 1,
+    "paymentCard": "1234123412341234",
+    "cardExpiration": "12/25",
+    "cvv": 123,
+    "billingAddress": "1809 Willowtree Lane",
+    "zip": 48105
+}
+```
+
+Response:
+```
+{
+    "orderId": 1,
+    "paymentStatus": "UNPAID",
+    "paymentCard": "1234123412341234",
+    "billingAddress": "1809 Willowtree Lane",
+    "zip": 48105
+}
+```
+
+
+Make payment:
+
+POST: `http://localhost:8082/payment/makePayment`
+
+Request body:
+```
+{
+    "orderId": 1,
+    "paymentCard": "1234123412341234",
+    "cardExpiration": "12/25",
+    "cvv": 123,
+    "billingAddress": "1809 Willowtree Lane",
+    "zip": 48105
+}
+```
+
+Response:
+```
+{
+    "userId": 1,
+    "orderId": 1,
+    "paymentStatus": "PAID"
+}
+// This means user 1 PAID order 1 successfully.
+```
+
+
+
+
 
 
 ## Account Service
@@ -321,7 +383,50 @@ Purpose: Configures Spring Security to use JWT-based authentication and applies 
 
 ### Account Service API Design
 
+Register: 
 
+POST: `http://localhost:8083/account/register`
 
+Request body:
+```
+{
+    "userEmail": "xxx@gmail.com",
+    "password": "00000000"
+}
+```
+```
+{
+    "userEmail": "yyy@gmail.com",
+    "password": "11111111"
+}
+```
 
+Response:
+```
+{
+    "userId": 2,
+    "userEmail": "yyy@gmail.com",
+    "password": "$2a$10$qvIWIwA9lyesrLEt/XOInu/qvR7e00UKWFUynf.HWIwTmrCI1nBx."
+}
+```
 
+Login:
+
+POST: `http://localhost:8083/account/login`
+
+Request Body:
+```
+{
+    "userEmail": "yyy@gmail.com",
+    "password": "11111111"
+}
+```
+
+Response:
+```
+{
+    "userId": 2,
+    "userEmail": "yyy@gmail.com",
+    "jwtToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5eXlAZ21haWwuY29tIiwidXNlcklkIjoyLCJpYXQiOjE3MzA4NjYxNjQsImV4cCI6MTczMTQ3MDk2NH0.FKeCviFpb_Abj1qen-ftD2fql3eCLPjWS_-yqV2_8yU"
+}
+```

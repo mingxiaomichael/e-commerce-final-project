@@ -2,36 +2,71 @@ package com.ecommerce.payment.service.impl;
 
 import com.ecommerce.payment.dao.PaymentDao;
 import com.ecommerce.payment.entity.Payment;
+import com.ecommerce.payment.payload.MakePaymentResponse;
 import com.ecommerce.payment.payload.PaymentDto;
 import com.ecommerce.payment.security.JwtUtil;
 import com.ecommerce.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
-    @Autowired
     private PaymentDao paymentDao;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    public PaymentServiceImpl(PaymentDao paymentDao) {
+        this.paymentDao = paymentDao;
+    }
 
     //setup payment method
-    public PaymentDto createPayment(PaymentDto paymentDto){
+    @Override
+    public PaymentDto createPayment(PaymentDto paymentDto, Long userId){
         Payment payment = mapToEntity(paymentDto);
-        //userId retrived by token extraction
-        String token = jwtUtil.getToken();
-        Long userId = jwtUtil.extractUserId(token);
         payment.setUserId(userId);
-        payment.setPaymentStatus("UNPAID");
+        payment.setCreateDateTime();
         Payment savedPayment = paymentDao.save(payment);
-
         return mapToDto(savedPayment);
     }
 
-    public PaymentDto comparePayment(PaymentDto paymentDto){
-        return null;
+    // Verify client input
+    @Override
+    public boolean verifyPayment(PaymentDto paymentDto, Long userId) {
+        Optional<Payment> payment = paymentDao.findById(userId);
+        if (payment.isPresent()) {
+            PaymentDto existedPaymentDto = mapToDto(payment.get());
+            return CompareTwoPaymentDto(paymentDto, existedPaymentDto);
+        }
+        return false;
+    }
+
+    @Override
+    public MakePaymentResponse makePayment(PaymentDto paymentDto, Long userId) {
+        MakePaymentResponse response = new MakePaymentResponse();
+        if (verifyPayment(paymentDto, userId)) {
+            response.setUserId(userId);
+            response.setOrderId(paymentDto.getOrderId());
+            response.setPaymentStatus("PAID");
+        }
+        else {
+            throw new NullPointerException("Payment is unverified!");
+        }
+        return response;
+    }
+
+    private boolean CompareTwoPaymentDto (PaymentDto paymentDto1, PaymentDto paymentDto2) {
+        if (paymentDto1 == null || paymentDto2 == null) return false;
+        if (!paymentDto1.getPaymentCard().equals(paymentDto2.getPaymentCard())) return false;
+        if (!paymentDto1.getCardExpiration().equals(paymentDto2.getCardExpiration())) return false;
+        if (paymentDto1.getCvv() != paymentDto2.getCvv()) return false;
+        if (!paymentDto1.getBillingAddress().equalsIgnoreCase(paymentDto2.getBillingAddress())) return false;
+        if (paymentDto1.getZIP() != paymentDto2.getZIP()) return false;
+        return true;
     }
 
 
