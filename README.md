@@ -192,7 +192,14 @@ CREATE KEYSPACE orderDB WITH replication = {'class': 'SimpleStrategy', 'replicat
 Create a table:
 ```
 use orderDB;
-CREATE TABLE orders(id int PRIMARY KEY, name text);
+CREATE TABLE orders (
+    userId BIGINT,
+    orderId BIGINT,
+    orderName TEXT,
+    itemId LIST<BIGINT>,
+    orderStatus TEXT,
+    PRIMARY KEY ((userId, orderId))
+);
 ```
 
 In `application.properties` file:

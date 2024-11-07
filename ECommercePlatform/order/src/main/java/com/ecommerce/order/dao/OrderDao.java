@@ -9,10 +9,6 @@ import org.springframework.data.cassandra.repository.Query;
 import java.util.List;
 
 public interface OrderDao extends CassandraRepository<Order, OrderEntityCompositeKey> {
-
-
     List<Order> findByUserId(Long userId);
-
-    List<Order> findByOrderId(Long orderId);
     Order findByUserIdAndOrderId(Long userId,Long orderId);
 }

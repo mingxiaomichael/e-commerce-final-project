@@ -9,7 +9,6 @@ public class OrderResponse {
     private Long orderId;
     private String orderName;
     private String orderStatus;
-
     private List<ItemDto> itemList;
 
     public OrderResponse(){}

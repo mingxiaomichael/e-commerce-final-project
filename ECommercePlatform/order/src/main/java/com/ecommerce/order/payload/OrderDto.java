@@ -6,7 +6,6 @@ import com.ecommerce.item.payload.ItemDto;
 import java.util.List;
 
 public class OrderDto {
-    private Long userId;
     private Long orderId;
     private String orderName;
     private List<Long> itemId;
@@ -14,19 +13,10 @@ public class OrderDto {
     public OrderDto() {
     }
 
-    public OrderDto(Long userId, Long orderId, String orderName, List<Long> itemId) {
-        this.userId = userId;
+    public OrderDto(Long orderId, String orderName, List<Long> itemId) {
         this.orderId = orderId;
         this.orderName = orderName;
         this.itemId = itemId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public Long getOrderId() {
@@ -56,7 +46,6 @@ public class OrderDto {
     @Override
     public String toString() {
         return "OrderDto{" +
-                "userId=" + userId +
                 ", orderId=" + orderId +
                 ", orderName='" + orderName + '\'' +
                 ", itemId=" + itemId +

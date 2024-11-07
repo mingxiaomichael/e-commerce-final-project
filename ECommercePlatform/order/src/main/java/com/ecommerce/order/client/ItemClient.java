@@ -16,6 +16,6 @@ public interface ItemClient {
     ResponseEntity<ItemDto> findByItemID(@PathVariable Long itemID);
 
     @PutMapping("/{itemId}")
-    public ResponseEntity<ItemDto> updateItem(@PathVariable Long itemId,@RequestBody ItemDto itemDto);
+    ResponseEntity<ItemDto> updateItem(@PathVariable Long itemId,@RequestBody ItemDto itemDto);
 }
 
