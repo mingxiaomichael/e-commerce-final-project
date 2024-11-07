@@ -34,8 +34,8 @@ public class ItemController {
     }
 
     @GetMapping("/itemID/{itemID}")
-    public  ResponseEntity<List<ItemDto>> findByItemID(@PathVariable int itemID){
-        List<ItemDto> response = itemService.findByItemID(itemID);
+    public  ResponseEntity<ItemDto> findByItemID(@PathVariable Long itemID){
+        ItemDto response = itemService.findByItemID(itemID);
         return ResponseEntity.ok(response);
 
     }
@@ -71,9 +71,9 @@ public class ItemController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{itemName}")
-    public ResponseEntity<ItemDto> updateItem(@PathVariable String itemName,@RequestBody ItemDto itemDto){
-        ItemDto updateItem = itemService.updateItem(itemName,itemDto);
+    @PutMapping("/{itemId}")
+    public ResponseEntity<ItemDto> updateItem(@PathVariable Long itemId,@RequestBody ItemDto itemDto){
+        ItemDto updateItem = itemService.updateItem(itemId,itemDto);
         return new ResponseEntity<>(updateItem,HttpStatus.OK);
     }
 

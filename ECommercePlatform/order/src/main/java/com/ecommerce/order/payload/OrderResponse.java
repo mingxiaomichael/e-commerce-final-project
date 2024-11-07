@@ -1,36 +1,25 @@
-package com.ecommerce.order.entity;
+package com.ecommerce.order.payload;
 
-import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
-import org.springframework.data.cassandra.core.mapping.*;
+import com.ecommerce.item.payload.ItemDto;
 
 import java.util.List;
 
-
-@Table(value = "orders")
-public class Order {
-    @PrimaryKeyColumn(name = "userId", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+public class OrderResponse {
     private Long userId;
-    @PrimaryKeyColumn(name = "orderId", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
     private Long orderId;
-    @Column("orderName")
     private String orderName;
-
-    @Column("itemId")
-    @CassandraType(type = CassandraType.Name.LIST, typeArguments = CassandraType.Name.BIGINT)
-    private List<Long> itemId;
-
-    @Column("orderStatus")
     private String orderStatus;
 
-    public Order(Long userId, Long orderId, String orderName, List<Long> itemId, String orderStatus) {
+    private List<ItemDto> itemList;
+
+    public OrderResponse(){}
+
+    public OrderResponse(Long userId, Long orderId, String orderName, String orderStatus, List<ItemDto> itemList) {
         this.userId = userId;
         this.orderId = orderId;
         this.orderName = orderName;
-        this.itemId = itemId;
         this.orderStatus = orderStatus;
-    }
-
-    public Order() {
+        this.itemList = itemList;
     }
 
     public Long getUserId() {
@@ -57,14 +46,6 @@ public class Order {
         this.orderName = orderName;
     }
 
-    public List<Long> getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(List<Long> itemId) {
-        this.itemId = itemId;
-    }
-
     public String getOrderStatus() {
         return orderStatus;
     }
@@ -73,14 +54,22 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
+    public List<ItemDto> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(List<ItemDto> itemList) {
+        this.itemList = itemList;
+    }
+
     @Override
     public String toString() {
-        return "Order{" +
+        return "OrderResponse{" +
                 "userId=" + userId +
                 ", orderId=" + orderId +
                 ", orderName='" + orderName + '\'' +
-                ", itemId=" + itemId +
                 ", orderStatus='" + orderStatus + '\'' +
+                ", itemList=" + itemList +
                 '}';
     }
 }

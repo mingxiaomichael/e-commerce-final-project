@@ -3,60 +3,63 @@ package com.ecommerce.order.payload;
 import com.ecommerce.item.entity.Item;
 import com.ecommerce.item.payload.ItemDto;
 
+import java.util.List;
+
 public class OrderDto {
-    private int id;
-    private String name;
-    private String itemName;
-    private ItemDto item;
+    private Long userId;
+    private Long orderId;
+    private String orderName;
+    private List<Long> itemId;
 
     public OrderDto() {
     }
 
-    public OrderDto(int id, String name, String itemName) {
-        this.id = id;
-        this.name = name;
-        this.itemName = itemName;
+    public OrderDto(Long userId, Long orderId, String orderName, List<Long> itemId) {
+        this.userId = userId;
+        this.orderId = orderId;
+        this.orderName = orderName;
+        this.itemId = itemId;
     }
 
-    public int getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
-    public String getItemName() {
-        return itemName;
+    public String getOrderName() {
+        return orderName;
     }
 
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
+    public void setOrderName(String orderName) {
+        this.orderName = orderName;
     }
 
-    public ItemDto getItem() {
-        return item;
+    public List<Long> getItemId() {
+        return itemId;
     }
 
-    public void setItem(ItemDto item) {
-        this.item = item;
+    public void setItemId(List<Long> itemId) {
+        this.itemId = itemId;
     }
 
     @Override
     public String toString() {
         return "OrderDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", itemName='" + itemName + '\'' +
-                ", item=" + item +
+                "userId=" + userId +
+                ", orderId=" + orderId +
+                ", orderName='" + orderName + '\'' +
+                ", itemId=" + itemId +
                 '}';
     }
 }

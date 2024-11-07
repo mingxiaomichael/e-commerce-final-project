@@ -8,9 +8,9 @@ import java.io.Serializable;
 
 @PrimaryKeyClass
 public class OrderEntityCompositeKey implements Serializable {
-    @PrimaryKeyColumn(name = "id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-    private int id;
-    @PrimaryKeyColumn(name = "name", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
-    private String name;
+    @PrimaryKeyColumn(name = "userId", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+    private Long userId;
+    @PrimaryKeyColumn(name = "orderId", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
+    private Long orderId;
 
 }

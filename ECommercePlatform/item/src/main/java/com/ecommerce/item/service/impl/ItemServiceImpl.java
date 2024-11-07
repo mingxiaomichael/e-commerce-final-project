@@ -62,14 +62,15 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public  List<ItemDto> findByItemID(int itemID){
-        List<Item> items = itemDao.findByItemID(itemID);
-        return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+    public  ItemDto findByItemID(Long itemID){
+        Item item = itemDao.findByItemID(itemID);
+        return mapToDto(item);
     }
 
     @Override
-    public ItemDto updateItem(String itemName,ItemDto itemDtoRequest){
-        Item item = itemDao.findByItemName(itemName).get(0);
+    public ItemDto updateItem(Long itemId,ItemDto itemDtoRequest){
+        //Item item = itemDao.findByItemName(itemName).get(0);
+        Item item = itemDao.findByItemID(itemId);
         item.setPrice(itemDtoRequest.getPrice());
         item.setCategory(itemDtoRequest.getCategory());
         item.setPurchaseLimit(itemDtoRequest.getPurchaseLimit());

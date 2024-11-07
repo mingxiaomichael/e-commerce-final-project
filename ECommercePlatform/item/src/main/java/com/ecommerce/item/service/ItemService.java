@@ -13,9 +13,9 @@ public interface ItemService {
 
     ItemResponse findAllItems(int pageNo, int pageSize, String sortBy, String sortDir);
 
-    List<ItemDto> findByItemID(int itemID);
+    ItemDto findByItemID(Long itemID);
 
-    ItemDto updateItem(String itemName,ItemDto itemDto);
+    ItemDto updateItem(Long itemId,ItemDto itemDto);
 
     void deleteItemByItemName(String itemName);
 

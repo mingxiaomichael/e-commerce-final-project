@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface ItemDao extends MongoRepository<Item, ObjectId> {
     List<Item> findByItemName(String itemName);
-    List<Item> findByItemID(int itemID);
+    Item findByItemID(Long itemID);
     List<Item> findByCategory(String category);
     List<Item> findByItemNameAndCategory(String itemName, String category);
 }

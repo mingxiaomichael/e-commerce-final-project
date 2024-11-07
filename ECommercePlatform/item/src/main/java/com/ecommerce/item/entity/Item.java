@@ -11,7 +11,7 @@ public class Item {
     private ObjectId id;
 
     @Field
-    private  int itemID;
+    private  Long itemID;
 
     @Field
     private String itemName;
@@ -31,7 +31,7 @@ public class Item {
     public Item(){
     }
 
-    public Item(ObjectId id, int itemID,String itemName, double price, String category, int purchaseLimit, int inventory) {
+    public Item(ObjectId id, Long itemID,String itemName, double price, String category, int purchaseLimit, int inventory) {
         this.id = id;
         this.itemID = itemID;
         this.itemName = itemName;
@@ -41,11 +41,11 @@ public class Item {
         this.inventory = inventory;
     }
 
-    public int getItemID() {
+    public Long getItemID() {
         return itemID;
     }
 
-    public void setItemID(int itemID) {
+    public void setItemID(Long itemID) {
         this.itemID = itemID;
     }
 
