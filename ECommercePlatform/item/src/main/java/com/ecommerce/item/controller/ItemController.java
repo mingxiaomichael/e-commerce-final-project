@@ -2,8 +2,10 @@ package com.ecommerce.item.controller;
 
 import com.ecommerce.item.payload.ItemDto;
 import com.ecommerce.item.payload.ItemResponse;
+import com.ecommerce.item.security.JwtUtil;
 import com.ecommerce.item.service.ItemService;
 import com.ecommerce.item.utils.AppConstants;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/items")
 public class ItemController {
+    private final ItemService itemService;
+    private HttpServletRequest request;
+    private JwtUtil jwtUtil;
+
     @Autowired
-    private ItemService itemService;
+    public ItemController(ItemService itemService, HttpServletRequest request, JwtUtil jwtUtil) {
+        this.itemService = itemService;
+        this.request = request;
+        this.jwtUtil = jwtUtil;
+    }
 
     @PostMapping
     public ResponseEntity<ItemDto> createItem(@RequestBody ItemDto itemDto) {

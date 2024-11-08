@@ -105,6 +105,7 @@ public class OrderServiceImpl implements OrderService {
         response.setUserId(makePaymentResponse.getUserId());
         response.setOrderId(makePaymentResponse.getOrderId());
         response.setOrderName(order.getOrderName());
+        response.setOrderStatus(order.getOrderStatus());
         response.setItemList(new ArrayList<>());
         List<Long> itemList = order.getItemId();
         for (Long item : itemList) {

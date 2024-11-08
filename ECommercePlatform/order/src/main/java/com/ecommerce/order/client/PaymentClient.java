@@ -1,8 +1,10 @@
 package com.ecommerce.order.client;
 
 import com.ecommerce.payment.payload.PaymentDto;
+import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.method.HandleAuthorizationDenied;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.ecommerce.payment.payload.MakePaymentResponse;
@@ -10,6 +12,4 @@ import com.ecommerce.payment.payload.MakePaymentResponse;
 public interface PaymentClient {
     @RequestMapping("/makePayment")
     ResponseEntity<MakePaymentResponse> makePayment(@RequestBody PaymentDto paymentDto);
-
-
 }

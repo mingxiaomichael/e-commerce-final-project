@@ -2,12 +2,15 @@ package com.ecommerce.order;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
-@SpringBootApplication
+
 @EnableFeignClients
 @EnableCassandraRepositories
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 public class OrderApplication {
 
     public static void main(String[] args) {

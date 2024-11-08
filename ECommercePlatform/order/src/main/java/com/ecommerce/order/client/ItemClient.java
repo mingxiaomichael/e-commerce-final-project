@@ -9,6 +9,7 @@ import java.util.List;
 
 @FeignClient(name = "item", url = "http://localhost:8080/items",configuration = FeignClientConfig.class)
 public interface ItemClient {
+
     @RequestMapping("/name/{itemName}")
     ResponseEntity<List<ItemDto>> findItemsByItemName(@PathVariable String itemName);
 
@@ -17,5 +18,6 @@ public interface ItemClient {
 
     @PutMapping("/{itemId}")
     ResponseEntity<ItemDto> updateItem(@PathVariable Long itemId,@RequestBody ItemDto itemDto);
+
 }
 

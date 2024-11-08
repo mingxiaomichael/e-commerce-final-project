@@ -27,7 +27,7 @@ public class orderController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderDto orderDto) {
         String token = jwtUtil.getJwtToken(request);
         Long userId = jwtUtil.extractUserId(token);

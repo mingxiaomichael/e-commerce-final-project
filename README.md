@@ -60,6 +60,10 @@ db.items.insertOne({
 });
 ```
 
+```
+db.items.drop()
+```
+
 Add dependency:
 ```
 <dependency>
@@ -102,29 +106,30 @@ POST: `http://localhost:8080/items`
 Request body:
 ```
 {
-    
+    "itemID": 100001,
+    "itemName": "Airpods",
+    "price": 199.99,
+    "category": "electronics",
+    "purchaseLimit": 10,
+    "inventory": 1000
+}
+
+{
+    "itemID": 100002,
     "itemName": "iPhone",
-    "price": 999.99,
+    "price": 799.99,
     "category": "electronics",
     "purchaseLimit": 10,
     "inventory": 1000
 }
 
 {
+    "itemID": 100003,
     "itemName": "iPad",
-    "price": 888.88,
+    "price": 699.99,
     "category": "electronics",
-    "purchaseLimit": 10,
-    "inventory": 0
-}
-
-{
-    "itemID": 1,
-    "itemName": "Airpod",
-    "price": 888.88,
-    "category": "electronics",
-    "purchaseLimit": 10,
-    "inventory": 1000
+    "purchaseLimit": 5,
+    "inventory": 500
 }
 ```
 
@@ -198,7 +203,7 @@ CREATE TABLE orders (
     orderName TEXT,
     itemId LIST<BIGINT>,
     orderStatus TEXT,
-    PRIMARY KEY ((userId, orderId))
+    PRIMARY KEY (userId, orderId)
 );
 ```
 
@@ -215,6 +220,120 @@ spring.cassandra.password=root
 spring.cassandra.local-datacenter=datacenter1
 spring.cassandra.authenticator=PasswordAuthenticator
 ```
+
+### Order Service API Design
+
+Create order: 
+
+POST: `http://localhost:8081/order`
+
+Request body:
+```
+{
+    "orderId": 202411002,
+    "orderName": "2-202411002",
+    "itemId": [100001, 100002, 100002, 100003, 100003]
+}
+```
+
+Response:
+```
+{
+    "orderId": 202411002,
+    "orderName": "2-202411002",
+    "itemId": [
+        100001,
+        100002,
+        100002,
+        100003,
+        100003
+    ]
+}
+```
+
+Find all orders:
+
+GET: `http://localhost:8081/order`
+
+Find order by orderId:
+
+GET: `http://localhost:8081/order/202411001`
+
+```
+{
+    "orderId": 202411001,
+    "orderName": " ",
+    "itemId": [
+        10001,
+        10001,
+        10002,
+        10003
+    ]
+}
+```
+
+
+Process Order:
+
+POST: `http://localhost:8081/order/processOrder`
+
+Request body:
+```
+{
+    "orderId": 202411001,
+    "paymentCard": "1234123412341234",
+    "cardExpiration": "12/25",
+    "cvv": 123,
+    "billingAddress": "1809 Willowtree Lane",
+    "zip": 48105
+}
+```
+
+Response:
+```
+{
+    "userId": 1,
+    "orderId": 202411001,
+    "orderName": " ",
+    "orderStatus": null,
+    "itemList": [
+        {
+            "itemID": 100001,
+            "itemName": "Airpods",
+            "price": 199.99,
+            "category": "electronics",
+            "purchaseLimit": 10,
+            "inventory": 998
+        },
+        {
+            "itemID": 100001,
+            "itemName": "Airpods",
+            "price": 199.99,
+            "category": "electronics",
+            "purchaseLimit": 10,
+            "inventory": 998
+        },
+        {
+            "itemID": 100002,
+            "itemName": "iPhone",
+            "price": 799.99,
+            "category": "electronics",
+            "purchaseLimit": 10,
+            "inventory": 999
+        },
+        {
+            "itemID": 100003,
+            "itemName": "iPad",
+            "price": 699.99,
+            "category": "electronics",
+            "purchaseLimit": 5,
+            "inventory": 499
+        }
+    ]
+}
+```
+
+
 
 
 ## Payment Service

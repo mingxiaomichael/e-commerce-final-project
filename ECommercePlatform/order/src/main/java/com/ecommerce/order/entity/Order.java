@@ -8,18 +8,18 @@ import java.util.List;
 
 @Table(value = "orders")
 public class Order {
-    @PrimaryKeyColumn(name = "userId", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name = "userid", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     private Long userId;
-    @PrimaryKeyColumn(name = "orderId", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name = "orderid", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
     private Long orderId;
-    @Column("orderName")
+    @Column("ordername")
     private String orderName;
 
-    @Column("itemId")
+    @Column("itemid")
     @CassandraType(type = CassandraType.Name.LIST, typeArguments = CassandraType.Name.BIGINT)
     private List<Long> itemId;
 
-    @Column("orderStatus")
+    @Column("orderstatus")
     private String orderStatus;
 
     public Order(Long userId, Long orderId, String orderName, List<Long> itemId, String orderStatus) {
