@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class ItemServiceImpl implements ItemService {
-    private ItemDao itemDao;
-    private MongoTemplate mongoTemplate;
+    private final ItemDao itemDao;
+    private final MongoTemplate mongoTemplate;
 
     @Autowired
     public ItemServiceImpl(ItemDao itemDao, MongoTemplate mongoTemplate) {
@@ -49,7 +49,7 @@ public class ItemServiceImpl implements ItemService {
 
         // get content for page abject
         List<Item> items = pageItems.getContent();
-        List<ItemDto> itemDtos = items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+        List<ItemDto> itemDtos = items.stream().map(this::mapToDto).collect(Collectors.toList());
 
         ItemResponse itemResponse = new ItemResponse();
         itemResponse.setContent(itemDtos);
@@ -88,7 +88,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> findItemByItemName(String itemName) {
         List<Item> items = itemDao.findByItemName(itemName);
-        return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+        return items.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -96,7 +96,7 @@ public class ItemServiceImpl implements ItemService {
         Query query = new Query();
         query.addCriteria(Criteria.where("inventory").gt(0));
         List<Item> items = mongoTemplate.find(query, Item.class);
-        return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+        return items.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ItemServiceImpl implements ItemService {
         Query query = new Query();
         query.addCriteria(Criteria.where("itemName").is(itemName).and("inventory").gt(0));
         List<Item> items = mongoTemplate.find(query, Item.class);
-        return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+        return items.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -112,7 +112,7 @@ public class ItemServiceImpl implements ItemService {
         Query query = new Query();
         query.addCriteria(Criteria.where("purchaseLimit").lt(limit));
         List<Item> items = mongoTemplate.find(query, Item.class);
-        return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+        return items.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     @Override
@@ -123,12 +123,11 @@ public class ItemServiceImpl implements ItemService {
 
         Aggregation aggregation = Aggregation.newAggregation(matchOperation);
         List<Item> items = mongoTemplate.aggregate(aggregation, "items", Item.class).getMappedResults();
-        return items.stream().map(item -> mapToDto(item)).collect(Collectors.toList());
+        return items.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     private ItemDto mapToDto(Item item) {
         ItemDto itemDto = new ItemDto();
-        //itemDto.setId(item.getId());
         itemDto.setItemID(item.getItemID());
         itemDto.setItemName(item.getItemName());
         itemDto.setPrice(item.getPrice());
@@ -140,7 +139,6 @@ public class ItemServiceImpl implements ItemService {
 
     private Item mapToEntity(ItemDto itemDto){
         Item item = new Item();
-        //item.setId(itemDto.getId());
         item.setItemID(itemDto.getItemID());
         item.setItemName(itemDto.getItemName());
         item.setPrice(itemDto.getPrice());

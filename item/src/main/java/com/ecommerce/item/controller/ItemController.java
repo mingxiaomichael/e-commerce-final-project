@@ -2,10 +2,8 @@ package com.ecommerce.item.controller;
 
 import com.ecommerce.item.payload.ItemDto;
 import com.ecommerce.item.payload.ItemResponse;
-import com.ecommerce.item.security.JwtUtil;
 import com.ecommerce.item.service.ItemService;
 import com.ecommerce.item.utils.AppConstants;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +15,10 @@ import java.util.List;
 @RequestMapping("/items")
 public class ItemController {
     private final ItemService itemService;
-    private HttpServletRequest request;
-    private JwtUtil jwtUtil;
 
     @Autowired
-    public ItemController(ItemService itemService, HttpServletRequest request, JwtUtil jwtUtil) {
+    public ItemController(ItemService itemService) {
         this.itemService = itemService;
-        this.request = request;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping
@@ -61,7 +55,6 @@ public class ItemController {
         List<ItemDto> response = itemService.findItemByInventory();
         return ResponseEntity.ok(response);
     }
-
 
     @GetMapping("/name/inventory/{itemName}")
     public ResponseEntity<List<ItemDto>> findByItemNameAndInventory(@PathVariable String itemName){

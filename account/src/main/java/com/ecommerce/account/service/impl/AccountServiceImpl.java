@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    private AccountDao accountDao;
-    private JwtUtil jwtUtil;
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final AccountDao accountDao;
+    private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     public AccountServiceImpl(AccountDao accountDao, JwtUtil jwtUtil) {
