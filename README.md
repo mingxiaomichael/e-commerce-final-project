@@ -1,5 +1,87 @@
 # E-Commerce-Final-Project
 
+## Docker Compose Setup
+
+This project contains four Spring Boot services:
+
+| **Service** | **Container** | **Host URL** | **Database** |
+|-------------|---------------|--------------|--------------|
+| Item Service | `item` | `http://localhost:8080` | MongoDB |
+| Order Service | `order` | `http://localhost:8081` | Cassandra |
+| Payment Service | `payment` | `http://localhost:8082` | MySQL |
+| Account Service | `account` | `http://localhost:8083` | MySQL |
+
+### Prerequisites
+
+- Docker Desktop, or Docker Engine with Docker Compose v2
+- Ports `8080`, `8081`, `8082`, `8083`, `27017`, `9042`, `3306`, and `3307` available on your machine
+
+### Start All Services
+
+From the project root, run:
+
+```bash
+docker compose up --build
+```
+
+The first startup can take several minutes because Docker builds the Java services and Cassandra needs time to initialize. Docker Compose also creates the required databases:
+
+- MongoDB database: `itemDB`
+- Cassandra keyspace: `orderdb`
+- MySQL database for payment: `paymentDB`
+- MySQL database for account: `accountDB`
+
+### Run In The Background
+
+```bash
+docker compose up --build -d
+```
+
+Check service status:
+
+```bash
+docker compose ps
+```
+
+View logs:
+
+```bash
+docker compose logs -f
+```
+
+View logs for one service:
+
+```bash
+docker compose logs -f order
+```
+
+### Stop Services
+
+```bash
+docker compose down
+```
+
+Stop services and delete database volumes:
+
+```bash
+docker compose down -v
+```
+
+Use `down -v` when you want a clean database reset.
+
+### Docker Database Connections
+
+When the services run inside Docker, they use container DNS names instead of `localhost`:
+
+| **Service** | **Docker Connection** |
+|-------------|------------------------|
+| Item MongoDB | `mongodb://root:root@item-db:27017/itemDB?authSource=admin` |
+| Order Cassandra | host `order-db`, port `9042`, user `cassandra`, password `cassandra`, keyspace `orderdb` |
+| Payment MySQL | `jdbc:mysql://payment-db:3306/paymentDB?allowPublicKeyRetrieval=true&useSSL=false` |
+| Account MySQL | `jdbc:mysql://account-db:3306/accountDB?allowPublicKeyRetrieval=true&useSSL=false` |
+
+The host machine can still access the services and databases through the mapped ports listed above.
+
 ## Service IP Setting
 
 Item Service: 127.0.0.1:8080

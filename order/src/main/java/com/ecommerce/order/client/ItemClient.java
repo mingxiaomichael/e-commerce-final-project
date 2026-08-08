@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name = "item", url = "http://localhost:8080/items",configuration = FeignClientConfig.class)
+@FeignClient(name = "item", url = "${item.service.url:http://localhost:8080/items}",configuration = FeignClientConfig.class)
 public interface ItemClient {
 
     @RequestMapping("/name/{itemName}")
@@ -20,4 +20,3 @@ public interface ItemClient {
     ResponseEntity<ItemDto> updateItem(@PathVariable Long itemId,@RequestBody ItemDto itemDto);
 
 }
-

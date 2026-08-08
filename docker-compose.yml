@@ -1,0 +1,161 @@
+services:
+  item:
+    build:
+      context: .
+      args:
+        MODULE: item
+    container_name: ecommerce-item
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://root:root@item-db:27017/itemDB?authSource=admin
+    ports:
+      - "8080:8080"
+    depends_on:
+      item-db:
+        condition: service_healthy
+
+  order:
+    build:
+      context: .
+      args:
+        MODULE: order
+    container_name: ecommerce-order
+    environment:
+      SPRING_CASSANDRA_CONTACT_POINTS: order-db
+      SPRING_CASSANDRA_PORT: 9042
+      SPRING_CASSANDRA_KEYSPACE_NAME: orderdb
+      SPRING_CASSANDRA_USERNAME: cassandra
+      SPRING_CASSANDRA_PASSWORD: cassandra
+      SPRING_CASSANDRA_LOCAL_DATACENTER: datacenter1
+      SPRING_CASSANDRA_SCHEMA_ACTION: CREATE_IF_NOT_EXISTS
+      ITEM_SERVICE_URL: http://item:8080/items
+      PAYMENT_SERVICE_URL: http://payment:8082/payment
+    ports:
+      - "8081:8081"
+    depends_on:
+      order-db-init:
+        condition: service_completed_successfully
+      item:
+        condition: service_started
+      payment:
+        condition: service_started
+
+  payment:
+    build:
+      context: .
+      args:
+        MODULE: payment
+    container_name: ecommerce-payment
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://payment-db:3306/paymentDB?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8082:8082"
+    depends_on:
+      payment-db:
+        condition: service_healthy
+
+  account:
+    build:
+      context: .
+      args:
+        MODULE: account
+    container_name: ecommerce-account
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://account-db:3306/accountDB?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    ports:
+      - "8083:8083"
+    depends_on:
+      account-db:
+        condition: service_healthy
+
+  item-db:
+    image: mongo:7
+    container_name: ecommerce-item-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: itemDB
+    ports:
+      - "27017:27017"
+    volumes:
+      - item-db-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')", "-u", "root", "-p", "root", "--authenticationDatabase", "admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  order-db:
+    image: cassandra:4.1
+    container_name: ecommerce-order-db
+    environment:
+      CASSANDRA_CLUSTER_NAME: ecommerce
+      CASSANDRA_DC: datacenter1
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      CASSANDRA_AUTHENTICATOR: PasswordAuthenticator
+    ports:
+      - "9042:9042"
+    volumes:
+      - order-db-data:/var/lib/cassandra
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -u cassandra -p cassandra -e 'DESCRIBE KEYSPACES'"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 90s
+
+  order-db-init:
+    image: cassandra:4.1
+    container_name: ecommerce-order-db-init
+    depends_on:
+      order-db:
+        condition: service_healthy
+    command: >
+      cqlsh order-db 9042 -u cassandra -p cassandra
+      -e "CREATE KEYSPACE IF NOT EXISTS orderdb
+      WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};"
+    restart: "no"
+
+  payment-db:
+    image: mysql:8.0
+    container_name: ecommerce-payment-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: paymentDB
+    ports:
+      - "3306:3306"
+    volumes:
+      - payment-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  account-db:
+    image: mysql:8.0
+    container_name: ecommerce-account-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: accountDB
+    ports:
+      - "3307:3306"
+    volumes:
+      - account-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+volumes:
+  item-db-data:
+  order-db-data:
+  payment-db-data:
+  account-db-data:
